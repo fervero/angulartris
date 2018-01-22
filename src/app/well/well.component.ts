@@ -29,7 +29,7 @@ export class WellComponent implements OnInit {
 
   getCurrentWell(well): void {
     this.well = well;
-    console.log(this.deadBricks = well.getDeadBricks());
+    this.deadBricks = well.getDeadBricks();
   }
 
   ngOnChanges() {
