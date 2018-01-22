@@ -10,12 +10,13 @@ import { AbstractPiece } from '../AbstractGame/AbstractGame';
 export class AsideComponent implements OnInit {
   public piece: AbstractPiece;
   blocks: number[][];
-  constructor(private game: GameService) { }
-
-  ngOnInit() {
-    this.game.oNextPiece.subscribe(piece => {
+  constructor(private game: GameService) { 
+    game.oNextPiece.subscribe(piece => {
       this.blocks = piece.setPosition([2, 2]).getAbsoluteXY();
     });
+  }
+
+  ngOnInit() {
   }
 
   ngOnChanges() {

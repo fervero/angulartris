@@ -12,10 +12,12 @@ export class GameService {
   private well: AbstractWell;
   public oCurrentPiece: Subject<AbstractPiece>;
   public oNextPiece: Subject<AbstractPiece>;
+  public oWell: Subject<AbstractWell>;
 
   constructor() {
     this.oCurrentPiece = new Subject();
     this.oNextPiece = new Subject();
+    this.oWell = new Subject();
   }
 
   init(width: number = 10) {
@@ -23,6 +25,10 @@ export class GameService {
     this.well = new AbstractWell(width);
     this.nextPiece = new AbstractPiece();
     this.getNewPiece();
+  }
+
+  updateWell(well): void {
+    this.oWell.next(this.well = well);
   }
 
   updateCurrentPiece(piece: AbstractPiece): void {
@@ -36,6 +42,11 @@ export class GameService {
   getNewPiece(): void {
     this.updateCurrentPiece(this.well.pickUp(this.nextPiece));
     this.updateNextPiece(new AbstractPiece());
+  }
+
+  getAnotherPiece(): void {
+    this.updateWell(this.well.putDown(this.currentPiece));
+    this.getNewPiece();
   }
 
   checkAndUpdatePiece(piece: AbstractPiece) {
@@ -52,6 +63,15 @@ export class GameService {
   movePieceRight(): void {
     const movedPiece = this.currentPiece.moveRight();
     this.checkAndUpdatePiece(movedPiece);
+  }
+
+  movePieceDown(): void {
+    const movedPiece = this.currentPiece.moveDown();
+    if (this.well.collision(movedPiece)) {
+      this.getAnotherPiece();
+    } else {
+      this.checkAndUpdatePiece(movedPiece);
+    }
   }
 
   rotatePiece(): void {

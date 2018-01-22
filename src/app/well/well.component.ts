@@ -10,18 +10,26 @@ import { AbstractWell, AbstractPiece } from '../AbstractGame/AbstractGame';
 export class WellComponent implements OnInit {
   private well: AbstractWell;
   private currentPiece: AbstractPiece;
-  blocks: number[][];
+  bricks: number[][];
+  public deadBricks: number[][];
 
-  constructor(private game: GameService) { }
+  constructor(private game: GameService) { 
+    game.oCurrentPiece.subscribe(this.getCurrentPiece.bind(this));
+    game.oWell.subscribe(this.getCurrentWell.bind(this));
+  }
 
   ngOnInit() {
-    this.game.oCurrentPiece.subscribe(this.getCurrentPiece.bind(this));
     this.well = this.game.getWell();
   }
 
   getCurrentPiece(piece): void {
     this.currentPiece = piece;
-    this.blocks = piece.getAbsoluteXY();
+    this.bricks = piece.getAbsoluteXY();
+  }
+
+  getCurrentWell(well): void {
+    this.well = well;
+    console.log(this.deadBricks = well.getDeadBricks());
   }
 
   ngOnChanges() {
