@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-brick',
@@ -13,48 +13,20 @@ export class BrickComponent implements OnInit {
   @Input() styling: string;
   style: any;
 
-  constructor(el: ElementRef) {
-    this.style = el.nativeElement.style;
+  constructor(private el: ElementRef, private renderer: Renderer2) {
   }
 
   ngOnInit() { }
 
   ngOnChanges() {
+    const nativeElement = this.el.nativeElement;
+    this.style = nativeElement.style;
     this.style.width = this.width + "%";
     this.style.height = this.height + "%";
-    this.style.position = "absolute";
-    this.style.display = "block";
-    this.style.backgroundColor = "black";
+    this.renderer.addClass(nativeElement, "brick");
+    this.renderer.addClass(this.el.nativeElement, this.styling);
     this.style.top = (this.y - 2) * this.height + "%";
-    console.log(this.style.left = this.x * this.width + "%");
+    this.style.left = this.x * this.width + "%";
   }
 
 }
-
-/*
-import { Directive, ElementRef, Input } from '@angular/core';
-
-@Directive({
-  selector: '[appBrick]'
-})
-export class BrickDirective {
-  @Input() height: number;
-  @Input() width: number;
-  @Input() x: number;
-  @Input() y: number;
-  @Input() styling: string;
-  constructor(private el: ElementRef) { 
-  }
-  ngAfterViewInit() {
-  // ngAfterViewChecked() {
-    const $el = this.el.nativeElement;
-    console.log("width: ", this.width);
-    $el.style.width = this.width;
-    $el.style.height = this.height;
-    $el.style.backgroundColor = "black";
-    $el.style.top = (this.y - 2) * this.height + "%";
-    $el.style.left = this.x * this.width + "%";
-    console.log($el.style);
-  }
-}
-*/

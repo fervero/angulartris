@@ -1,6 +1,7 @@
 <app-header [title]="title"></app-header>
 <div class="panel panel_main">
-  <app-well></app-well>
+  <app-well class="well"></app-well>
 </div>
-<app-aside class="panel panel_aside" [piece]="piece"></app-aside>
+<app-aside class="panel panel_aside"></app-aside>
 <app-footer></app-footer>
+<button (click)="getNewPiece()">Next</button>

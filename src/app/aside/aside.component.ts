@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { GameService } from '../game.service';
 import { AbstractPiece } from '../AbstractGame/AbstractGame';
 
 @Component({
@@ -7,14 +8,17 @@ import { AbstractPiece } from '../AbstractGame/AbstractGame';
   styleUrls: ['./aside.component.scss']
 })
 export class AsideComponent implements OnInit {
-  @Input() piece: AbstractPiece;
+  public piece: AbstractPiece;
   blocks: number[][];
-  constructor() { }
+  constructor(private game: GameService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.game.oNextPiece.subscribe(piece => {
+      this.blocks = piece.setPosition([2, 2]).getAbsoluteXY();
+    });
+  }
 
   ngOnChanges() {
-    this.blocks = this.piece.setPosition([2, 2]).getAbsoluteXY();
   }
 
 }

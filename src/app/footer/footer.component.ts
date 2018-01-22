@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  constructor(private game: GameService) { }
 
   ngOnInit() {
+  }
+
+  left(): void {
+    this.game.movePieceLeft();
+  }
+
+  right(): void {
+    this.game.movePieceRight();
+  }
+
+  rotate(): void {
+    this.game.rotatePiece();
   }
 
 }

@@ -11,9 +11,14 @@ import { AbstractPiece } from './AbstractGame/AbstractGame';
 export class AppComponent {
   title = "Angulartris";
   public piece: AbstractPiece;
-  constructor (private game: GameService) {}
+  constructor (private game: GameService) {
+    game.init();
+  }
 
   ngOnInit() {
-    this.piece = this.game.getPiece();
   }
+  getNewPiece(): void {
+    this.game.getNewPiece();
+  }
+
 }
