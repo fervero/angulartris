@@ -32,6 +32,10 @@ export class WellComponent implements OnInit {
     this.deadBricks = well.getDeadBricks();
   }
 
+  trackById(index, brick) {
+    return brick[2];
+  }
+
   ngOnChanges() {
   }
 
