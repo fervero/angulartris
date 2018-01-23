@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GameService } from '../game.service';
+import { GameControlService } from '../game-control.service';
 import { AbstractPiece } from '../AbstractGame/AbstractGame';
 
 @Component({
@@ -9,15 +10,14 @@ import { AbstractPiece } from '../AbstractGame/AbstractGame';
 })
 export class AsideComponent implements OnInit {
   public piece: AbstractPiece;
-  public score: number;
   blocks: number[][];
-  constructor(private game: GameService) { 
+  constructor(public game: GameService, private control: GameControlService) { 
     game.oNextPiece.subscribe(piece => {
       this.blocks = piece.setPosition([2, 2]).getAbsoluteXY();
     });
-    game.oScore.subscribe( score => this.score = score );
-    this.score = 0;
   }
+
+  start = this.control.start.bind(this.control);
 
   ngOnInit() {
   }

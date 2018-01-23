@@ -1,9 +1,8 @@
 <app-header [title]="title"></app-header>
 <div class="panel panel_main">
-  <app-well class="well"></app-well>
+  <app-well class="well" (click)="togglePause()"></app-well>
 </div>
 <app-aside class="panel panel_aside"></app-aside>
 <app-footer></app-footer>
-<button (click)="getNewPiece()">Next</button>
-<button (click)="down()">Down</button>
-<button (click)="start()">Start</button>
+<app-modal *ngIf="( game.oState | async ) === GAME_OVER" (click)="start()">Game over!</app-modal>
+<app-modal *ngIf="( game.oState | async ) === PAUSED" (click)="togglePause()">Paused...</app-modal>

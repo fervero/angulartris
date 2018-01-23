@@ -1,6 +1,8 @@
 import { Component, HostListener } from '@angular/core';
 import { GameService } from './game.service';
+import { GameControlService } from './game-control.service';
 import { AbstractPiece } from './AbstractGame/AbstractGame';
+import { GAME_OVER, PAUSED } from './constants';
 
 @Component({
   selector: 'app-root',
@@ -9,35 +11,16 @@ import { AbstractPiece } from './AbstractGame/AbstractGame';
 })
 export class AppComponent {
   title = "Angulartris";
+  readonly GAME_OVER = GAME_OVER;
+  readonly PAUSED = PAUSED;
   gameLoop: any = 0;
-  constructor(private game: GameService) {
+  constructor(public game: GameService, private control: GameControlService) { }
 
-  }
-
-  ngOnInit() {
-    // this.game.init();
-  }
-  getNewPiece(): void {
-    this.game.getNewPiece();
-  }
-  down(): void {
-    this.game.movePieceDown();
-  }
-  start(): void {
-    this.game.init();
-    clearInterval(this.gameLoop);
-    this.gameLoop = setInterval(this.down.bind(this), 250);
-  }
-
-  togglePause(): void {
-    if (this.gameLoop) {
-      clearInterval(this.gameLoop);
-      this.gameLoop = 0;
-    } else {
-      this.gameLoop = setInterval(this.down.bind(this), 250);
-    }
-  }
-
+  ngOnInit() { }
+  down = this.game.movePieceDown.bind(this.game);
+  togglePause = this.control.togglePause.bind(this.control);
+  start = this.control.start.bind(this.control);
+  
   @HostListener("window:keydown", ['$event.key'])
   onKey(key): void {
     switch (key.toLowerCase()) {      
@@ -55,6 +38,8 @@ export class AppComponent {
   }
   @HostListener("window:click", ['$event.srcElement'])
   onClick(element): void {
-    element.blur();
+    if(element.tagName.toLowerCase() === "button") {
+      element.blur();
+    }
   }
 }

@@ -9,6 +9,8 @@ import { FooterComponent } from './footer/footer.component';
 import { WellComponent } from './well/well.component';
 import { AsideComponent } from './aside/aside.component';
 import { BrickComponent } from './brick/brick.component';
+import { ModalComponent } from './modal/modal.component';
+import { GameControlService } from './game-control.service';
 
 
 @NgModule({
@@ -18,12 +20,13 @@ import { BrickComponent } from './brick/brick.component';
     FooterComponent,
     WellComponent,
     AsideComponent,
-    BrickComponent
+    BrickComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule
   ],
-  providers: [GameService],
+  providers: [GameService, GameControlService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

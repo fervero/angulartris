@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
 import { AbstractWell, AbstractPiece } from './AbstractGame/AbstractGame';
 import { arrayCopy } from './AbstractGame/utils';
-import { GAME_OVER, LIVE } from './constants';
+import { GAME_OVER, LIVE, PAUSED } from './constants';
 
 @Injectable()
 export class GameService {
@@ -28,6 +28,7 @@ export class GameService {
     this.oNextPiece = new Subject();
     this.well = new AbstractWell();
     this.oWell = new Subject();
+    this.oState.subscribe(state => this.state = state);
   }
 
   init(width: number = 10) {
@@ -73,7 +74,7 @@ export class GameService {
   }
 
   checkAndUpdatePiece(piece: AbstractPiece) {
-    if (!this.well.collision(piece)) {
+    if ((this.state === LIVE) && !this.well.collision(piece)) {
       this.updateCurrentPiece(piece);
     };
   }
