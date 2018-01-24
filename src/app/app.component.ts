@@ -14,7 +14,7 @@ export class AppComponent {
   readonly GAME_OVER = GAME_OVER;
   readonly PAUSED = PAUSED;
   gameLoop: any = 0;
-  constructor(public game: GameService, private control: GameControlService) { }
+  constructor(public game: GameService, private control: GameControlService) {}
 
   ngOnInit() { }
   down = this.game.movePieceDown.bind(this.game);

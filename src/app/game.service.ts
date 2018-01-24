@@ -3,11 +3,12 @@ import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
 import { AbstractWell, AbstractPiece } from './AbstractGame/AbstractGame';
 import { arrayCopy } from './AbstractGame/utils';
-import { GAME_OVER, LIVE, PAUSED } from './constants';
+import { FIRST_GAME, GAME_OVER, LIVE, PAUSED } from './constants';
 
 @Injectable()
 export class GameService {
   private width: number;
+  public oWidth: Subject<number>;
   private currentPiece: AbstractPiece;
   public oCurrentPiece: Subject<AbstractPiece>;
   private nextPiece: AbstractPiece;
@@ -28,14 +29,20 @@ export class GameService {
     this.oNextPiece = new Subject();
     this.well = new AbstractWell();
     this.oWell = new Subject();
+    this.oWidth = new Subject();
     this.oState.subscribe(state => this.state = state);
+
+    // Timeout is needed so the signal is emitted right after the constructor is done, not earlier.
+    setTimeout(() => this.oState.next(FIRST_GAME), 0);
   }
 
   init(width: number = 10) {
     this.width = width;
+    this.oWidth.next(width);
     this.updateWell(new AbstractWell(width));
     this.updateNextPiece(new AbstractPiece());
     this.getNewPiece();
+    this.updateState(LIVE);
     this.oScore.next(this.score = 0);
   }
 
@@ -56,7 +63,6 @@ export class GameService {
   }
 
   getNewPiece(): void {
-    this.updateState(LIVE);
     this.updateCurrentPiece(this.well.pickUp(this.nextPiece));
     this.updateNextPiece(new AbstractPiece());
   }

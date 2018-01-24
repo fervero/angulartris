@@ -1,2 +1,13 @@
-<app-brick *ngFor="let block of bricks" [x]="block[0]" [y]="block[1]" [width]="10" [height]="5"></app-brick>
-<app-brick *ngFor="let block of deadBricks; trackBy: trackById;" [x]="block[0]" [y]="block[1]" [width]="10" [height]="5" [styling]="'brick_dead'"></app-brick>
+<app-brick 
+	*ngFor="let block of bricks" 
+	[x]="block[0]" 
+	[y]="block[1]" 
+	[width]="brickWidth"
+	[height]="brickHeight"></app-brick>
+<app-brick 
+	*ngFor="let block of deadBricks; trackBy: trackById;" 
+	[x]="block[0]" 
+	[y]="block[1]" 
+	[width]="brickWidth" 
+	[height]="brickHeight" 
+	[styling]="'brick_dead'"></app-brick>

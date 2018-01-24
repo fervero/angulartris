@@ -12,7 +12,6 @@ import { BrickComponent } from './brick/brick.component';
 import { ModalComponent } from './modal/modal.component';
 import { GameControlService } from './game-control.service';
 
-
 @NgModule({
   declarations: [
     AppComponent,

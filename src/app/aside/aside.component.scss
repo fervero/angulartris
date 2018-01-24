@@ -1,12 +1,33 @@
+@import '../../colors.scss';
+
 :host {
 	display: inline-block;
 	vertical-align: top;
 }
+
+
+@keyframes pulse {
+	from {
+		background-color: $color-widget;
+	}
+	50% {
+		background-color: lighten($color-widget, 30%);
+	}
+	to {
+		background-color: $color-widget;
+	}
+}
+
 .btn {
 	width: 60%;
 	margin: 0 auto;
 	font-style: italic;
 }
+.press_me {
+	animation: pulse 1s linear infinite;
+}
+
+
 .heading {
 	font-size: 1.8rem;
 }	

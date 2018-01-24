@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-brick',
-  templateUrl: './brick.component.html',
+  template: "",
   styleUrls: ['./brick.component.scss']
 })
 export class BrickComponent implements OnInit {

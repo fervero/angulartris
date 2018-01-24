@@ -12,6 +12,8 @@ export class WellComponent implements OnInit {
   private currentPiece: AbstractPiece;
   bricks: number[][];
   public deadBricks: number[][];
+  public brickWidth: number = 10;
+  public brickHeight: number = 5;
 
   constructor(private game: GameService) { 
     game.oCurrentPiece.subscribe(this.getCurrentPiece.bind(this));
@@ -20,6 +22,10 @@ export class WellComponent implements OnInit {
 
   ngOnInit() {
     this.well = this.game.getWell();
+    this.game.oWidth.subscribe((width) => {
+      this.brickHeight = 50 / width;
+      this.brickWidth = 100 / width;
+    });
   }
 
   getCurrentPiece(piece): void {

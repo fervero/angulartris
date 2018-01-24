@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { GameService } from '../game.service';
 import { GameControlService } from '../game-control.service';
 import { AbstractPiece } from '../AbstractGame/AbstractGame';
+import { FIRST_GAME } from '../constants';
 
 @Component({
   selector: 'app-aside',
@@ -10,6 +11,7 @@ import { AbstractPiece } from '../AbstractGame/AbstractGame';
 })
 export class AsideComponent implements OnInit {
   public piece: AbstractPiece;
+  public readonly FIRST_GAME = FIRST_GAME;
   blocks: number[][];
   constructor(public game: GameService, private control: GameControlService) { 
     game.oNextPiece.subscribe(piece => {

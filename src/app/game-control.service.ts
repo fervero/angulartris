@@ -5,13 +5,15 @@ import { DEFAULT_INTERVAL } from './AbstractGame/AbstractGame';
 
 @Injectable()
 /**
- * Separate class, handling game flow like: pause, resume, new game.
+ * Separate class, handling game flow like: pause, resume, new game. Because the GameService grew larger and larger.
  */
 export class GameControlService {
   gameLoop: any;
   state: string;
+  interval: number;
   constructor(private game: GameService) {
     game.oState.subscribe(state => this.state = state);
+    game.oWidth.subscribe(width => this.interval = DEFAULT_INTERVAL * 10 / width);
   }
 
   down = this.game.movePieceDown.bind(this.game);
@@ -19,7 +21,7 @@ export class GameControlService {
   start(): void {
     this.game.init();
     clearInterval(this.gameLoop);
-    this.gameLoop = setInterval(this.down, DEFAULT_INTERVAL);
+    this.gameLoop = setInterval(this.down, this.interval);
     this.game.oState.next(LIVE);
   }
 
@@ -29,7 +31,7 @@ export class GameControlService {
       this.gameLoop = 0;
       this.game.oState.next(PAUSED);
     } else if (this.state === PAUSED) {
-      this.gameLoop = setInterval(this.down, DEFAULT_INTERVAL);
+      this.gameLoop = setInterval(this.down, this.interval);
       this.game.oState.next(LIVE);
     }
   }
