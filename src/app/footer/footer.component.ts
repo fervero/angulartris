@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { GameService } from '../game.service';
+import { GameControlService } from '../game-control.service';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/map';
+import { LEFT, RIGHT, ROTATE } from '../constants';
 
 @Component({
   selector: 'app-footer',
@@ -8,21 +13,16 @@ import { GameService } from '../game.service';
 })
 export class FooterComponent implements OnInit {
 
-  constructor(private game: GameService) { }
+  readonly LEFT = LEFT;
+  readonly RIGHT = RIGHT;
+  readonly ROTATE = ROTATE;
+
+  constructor(private game: GameService, private control: GameControlService, private ref: ElementRef) {}
 
   ngOnInit() {
-  }
-
-  left(): void {
-    this.game.movePieceLeft();
-  }
-
-  right(): void {
-    this.game.movePieceRight();
-  }
-
-  rotate(): void {
-    this.game.rotatePiece();
+    const button$ = Observable.fromEvent(this.ref.nativeElement, 'click')
+      .map(({target}) => target.dataset.action);
+    this.control.bindUIObservable(button$);
   }
 
 }

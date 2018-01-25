@@ -4,5 +4,5 @@
 </div>
 <app-aside class="panel panel_aside"></app-aside>
 <app-footer></app-footer>
-<app-modal *ngIf="( game.oState | async ) === GAME_OVER" (click)="start()">Game over!</app-modal>
-<app-modal *ngIf="( game.oState | async ) === PAUSED" (click)="togglePause()">Paused...</app-modal>
+<app-modal *ngIf="( game.state$ | async ) === GAME_OVER" [action]="NEW_GAME">Game over!</app-modal>
+<app-modal *ngIf="( game.state$ | async ) === PAUSED" [action]="PAUSE">Paused...</app-modal>

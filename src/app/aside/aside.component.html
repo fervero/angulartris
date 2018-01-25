@@ -4,4 +4,4 @@
 </div>
 <div class="heading">Score:</div>
 <div class="score_box">{{( game.oScore | async ) || "0" }}</div>
-<button class="btn" [class.press_me]="( game.oState | async ) === FIRST_GAME" (click)="start()">Start!</button>
+<button class="btn" [class.press_me]="( game.state$ | async ) === FIRST_GAME" [attr.data-action]="NEW_GAME">Start!</button>

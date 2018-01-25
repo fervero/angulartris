@@ -1,39 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { of } from 'rxjs/observable/of';
-import { AbstractWell, AbstractPiece } from './AbstractGame/AbstractGame';
+import { AbstractWell, AbstractPiece, DEFAULT_WIDTH } from './AbstractGame/AbstractGame';
 import { arrayCopy } from './AbstractGame/utils';
 import { FIRST_GAME, GAME_OVER, LIVE, PAUSED } from './constants';
 
 @Injectable()
 export class GameService {
   private width: number;
-  public oWidth: Subject<number>;
+  public oWidth: BehaviorSubject<number>;
   private currentPiece: AbstractPiece;
   public oCurrentPiece: Subject<AbstractPiece>;
   private nextPiece: AbstractPiece;
   public oNextPiece: Subject<AbstractPiece>;
   private well: AbstractWell;
   public oWell: Subject<AbstractWell>;
-  private score: number;
-  public oScore: Subject<number>;
-  private state: string;
-  public oState: Subject<string>;
+  public oScore: BehaviorSubject<number>;
+  public state$: BehaviorSubject<string>;
 
   constructor() {
-    this.score = 0;
-    this.oScore = new Subject();
-    this.state = '';
-    this.oState = new Subject();
+    this.oScore = new BehaviorSubject(0);
+    this.state$ = new BehaviorSubject(FIRST_GAME);
     this.oCurrentPiece = new Subject();
     this.oNextPiece = new Subject();
     this.well = new AbstractWell();
     this.oWell = new Subject();
-    this.oWidth = new Subject();
-    this.oState.subscribe(state => this.state = state);
-
-    // Timeout is needed so the signal is emitted right after the constructor is done, not earlier.
-    setTimeout(() => this.oState.next(FIRST_GAME), 0);
+    this.oWidth = new BehaviorSubject(DEFAULT_WIDTH);
   }
 
   init(width: number = 10) {
@@ -43,7 +36,7 @@ export class GameService {
     this.updateNextPiece(new AbstractPiece());
     this.getNewPiece();
     this.updateState(LIVE);
-    this.oScore.next(this.score = 0);
+    this.oScore.next(0);
   }
 
   updateWell(well): void {
@@ -59,7 +52,7 @@ export class GameService {
   }
 
   updateState(state: string): void {
-    this.oState.next(this.state = state);
+    this.state$.next(state);
   }
 
   getNewPiece(): void {
@@ -70,17 +63,17 @@ export class GameService {
   getAnotherPiece(): void {
     const updatedWell = this.well.putDown(this.currentPiece);
     const fullLines = updatedWell.prune();
-    const score = this.score + fullLines.number;
+    const score = this.oScore.getValue() + fullLines.number;
     this.updateWell(fullLines.well);
     this.getNewPiece();
-    this.oScore.next(this.score = score);
+    this.oScore.next(score);
     if (this.well.collision(this.currentPiece)) {
       this.updateState(GAME_OVER);
     }
   }
 
   checkAndUpdatePiece(piece: AbstractPiece) {
-    if ((this.state === LIVE) && !this.well.collision(piece)) {
+    if ((this.state$.getValue() === LIVE) && !this.well.collision(piece)) {
       this.updateCurrentPiece(piece);
     };
   }
@@ -96,7 +89,7 @@ export class GameService {
   }
 
   movePieceDown(): void {
-    if (this.state === GAME_OVER) return;
+    if (this.state$.getValue() === GAME_OVER) return;
     const movedPiece = this.currentPiece.moveDown();
     if (this.well.collision(movedPiece)) {
       this.getAnotherPiece();

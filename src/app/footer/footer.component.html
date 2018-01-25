@@ -1,5 +1,5 @@
 <div class="footer">
-  <button class="btn" (click)="left()">A</button>
-  <button class="btn" (click)="rotate()">S</button>
-  <button class="btn" (click)="right()">D</button>
+  <button class="btn" [attr.data-action]="LEFT">A</button>
+  <button class="btn" [attr.data-action]="ROTATE">S</button>
+  <button class="btn" [attr.data-action]="RIGHT">D</button>
 </div>
